@@ -172,6 +172,7 @@ input.err{border-color:#e24b4a}
         <div style="font-size:19px;font-weight:700;color:#2DBFBF;margin-bottom:.25rem">Сўровнома юборилди!</div>
         <div style="font-size:14px;color:#888;margin-bottom:.75rem">Заявка успешно отправлена!</div>
         <div style="font-size:14px;color:#666;line-height:1.7">Менежер сиз билан тез орада боғланади.<br>Менеджер свяжется с вами в ближайшее время.<br><br>Рахмат, <strong id="tname" style="color:#2DBFBF"></strong>!</div>
+        <div id="mgr_ok" style="display:none;margin-top:.6rem;font-size:13px;color:#aaa">Сизни таклиф қилди: <strong id="mgr_name" style="color:#2DBFBF"></strong></div>
         <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid #f0f0f0">
           <div style="font-size:13px;color:#2DBFBF;font-weight:700">MAXCELLON</div>
           <div style="font-size:11px;color:#aaa;margin-top:2px">Надёжная работа · Ishonchli energiya</div>
@@ -192,6 +193,9 @@ input.err{border-color:#e24b4a}
 
 <script>
 var SCRIPT_URL="https://script.google.com/macros/s/AKfycbyQMVPyu8OlzKWvDA_Gsw2mPgz0_nEY7hbkGKrLTF1F1mTMrhMMi2JN9IfKNmxt8xuO/exec";
+var MANAGERS=["Feruz","Asadulloh","Ulug'bek","Jahongir"];
+var _ref=new URLSearchParams(window.location.search).get("ref")||"";
+var manager=MANAGERS.includes(_ref)?_ref:"";
 var CATS=["Электротележки / Рохли", "Перевозчики поддонов", "Электроштабелеры", "Ричтраки", "Комплектовщики заказов", "Узкопроходные штабелеры", "Электропогрузчики (до 2.5т)", "Электропогрузчики (тяжелые)", "Поломоечные машины", "Ножничные подъемники", "Коленчатые подъемники", "Тягачи складские/аэродромные", "Гольф-кары и шаттлы", "Коммунальные электромобили", "Шахтный/Горный транспорт", "ИБП / Резервное питание", "Солнечная/ветровая система", "── Бошқа / Другое ──"];
 var BRANDS=["CAT", "STILL", "Linde", "Jungheinrich", "Crown", "Toyota", "Komatsu", "Honda", "Mitsubishi", "Hyster", "Yale", "Doosan", "Clark", "Nissan", "Genie", "JLG", "Haulotte", "Skyjack", "Karcher", "Tennant", "Nilfisk", "Club Car", "EZ-GO", "Yamaha", "Goupil", "Alke", "Sandvik", "Epiroc", "Taylor-Dunn", "Hangcha", "TCM", "Rocla", "EP Equipment", "Lema", "Magaziner", "── Бошқа / Другая ──"];
 var VOLTS=["6V", "8V", "12V", "24V", "36V", "40V", "48V", "72V", "80V", "96V", "── Бошқа / Другой ──"];
@@ -290,6 +294,7 @@ function buildSummary(){
     ["Модель",document.getElementById("f_model").value||"—"],
     ["Изоҳ",document.getElementById("f_note").value||"—"]
   ];
+  if(manager) d.unshift(["Менежер / Менеджер","<strong style='color:#2DBFBF'>"+manager+"</strong>"]);
   document.getElementById("sum_box").innerHTML=d.map(function(r){
     return "<div class='sum-row'><span class='sk'>"+r[0]+"</span><span class='sv'>"+r[1]+"</span></div>";
   }).join("");
@@ -310,11 +315,13 @@ function submit(){
     ah:document.getElementById("f_ah_c").value||AHS[sel.ah],
     qty:document.getElementById("f_qty").value,
     model:document.getElementById("f_model").value,
-    note:document.getElementById("f_note").value
+    note:document.getElementById("f_note").value,
+    manager:manager||"Boshqa"
   };
   fetch(SCRIPT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)})
   .then(function(){
     document.getElementById("tname").textContent=data.name.split(" ")[0];
+    if(manager){document.getElementById("mgr_name").textContent=manager;document.getElementById("mgr_ok").style.display="block";}
     document.querySelectorAll(".step").forEach(function(s){s.classList.remove("active");});
     document.getElementById("s5").classList.add("active");
     document.getElementById("pb").style.width="100%";
