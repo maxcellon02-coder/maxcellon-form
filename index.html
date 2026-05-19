@@ -105,6 +105,10 @@ input.err{border-color:#e24b4a}
       <div class="drum-outer"><div class="drum-hl"></div><div class="drum-ft t"></div><div class="drum-ft b"></div><div class="drum-list" id="dl_brand"></div></div>
       <div class="or">ёки маркани ўзингиз ёзинг</div>
       <input id="f_brand_c" type="text" placeholder="Бошқа марка...">
+      <div class="fw" style="margin-top:.8rem">
+        <label class="fl">Техника модели</label>
+        <input id="f_model" type="text" placeholder="Масалан: Toyota 8FBM15, Linde E20...">
+      </div>
       <div class="nav">
         <button class="btn-b" onclick="go(0)">← Орқага</button>
         <button class="btn-n" onclick="go(2)">Давомийлик →</button>
@@ -117,9 +121,10 @@ input.err{border-color:#e24b4a}
       <label class="fl">АКБ тури <span class="req">*</span></label>
       <div class="chip-grp" id="cg_akb">
         <div class="chip" onclick="chip(this,'cg_akb','AGM / Gel')">AGM / Gel</div>
-        <div class="chip" onclick="chip(this,'cg_akb','Кислотный PzS')">Кислотный PzS</div>
-        <div class="chip" onclick="chip(this,'cg_akb','Кислотный PzB')">Кислотный PzB</div>
-        <div class="chip" onclick="chip(this,'cg_akb','Li-ion / LiFePO4')">Li-ion / LiFePO4</div>
+        <div class="chip" onclick="chip(this,'cg_akb','Кислотали PzS')">Кислотали PzS</div>
+        <div class="chip" onclick="chip(this,'cg_akb','Кислотали PzB')">Кислотали PzB</div>
+        <div class="chip" onclick="chip(this,'cg_akb','Li-ion / LiFePO4')">Li-ion / LiFePO₄</div>
+        <div class="chip" onclick="chip(this,'cg_akb','Литий железо фосфат / LiFePO4')">Литий железо фосфат / LiFePO₄</div>
         <div class="chip dim" onclick="chip(this,'cg_akb','Бошқа')">Бошқа / Другой</div>
       </div>
       <label class="fl" style="margin-top:.5rem">Вольтаж <span class="req">*</span></label>
@@ -138,16 +143,26 @@ input.err{border-color:#e24b4a}
       <div class="or">ёки ўзингиз ёзинг</div>
       <input id="f_ah_c" type="text" placeholder="Масалан: 350Ah...">
       <div class="fw" style="margin-top:.8rem">
+        <label class="fl">Ўлчамлари (мм): Эни × Бўйи × Баландлиги</label>
+        <div style="display:flex;gap:6px">
+          <input id="f_dim_w" type="number" min="1" placeholder="Эни" style="flex:1">
+          <input id="f_dim_l" type="number" min="1" placeholder="Бўйи" style="flex:1">
+          <input id="f_dim_h" type="number" min="1" placeholder="Баландлиги" style="flex:1">
+        </div>
+      </div>
+      <div class="fw">
         <label class="fl">Миқдори (дона) <span class="req">*</span></label>
         <input id="f_qty" type="number" min="1" placeholder="Масалан: 4">
       </div>
-      <div class="fw">
-        <label class="fl">Техника модели</label>
-        <input id="f_model" type="text" placeholder="Масалан: Toyota 8FBM15, Linde E20...">
+      <div class="fw" style="margin-top:.6rem">
+        <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:#555;font-weight:600;cursor:pointer">
+          <input id="f_charger" type="checkbox" style="width:18px;height:18px;accent-color:#2DBFBF;cursor:pointer">
+          Зарядлаш мосламаси керак / Зарядное устройство нужно
+        </label>
       </div>
       <div class="fw">
         <label class="fl">Қўшимча изоҳ</label>
-        <textarea id="f_note" style="height:65px;resize:none" placeholder="Ўлчамлар, бошқа маълумот..."></textarea>
+        <textarea id="f_note" style="height:65px;resize:none" placeholder="Бошқа маълумот..."></textarea>
       </div>
       <div class="nav">
         <button class="btn-b" onclick="go(2)">← Орқага</button>
@@ -196,11 +211,11 @@ var SCRIPT_URL="https://script.google.com/macros/s/AKfycbyQMVPyu8OlzKWvDA_Gsw2mP
 var MANAGERS=["Feruz","Asadulloh","Ulug'bek","Jahongir"];
 var _ref=new URLSearchParams(window.location.search).get("ref")||"";
 var manager=MANAGERS.includes(_ref)?_ref:"";
-var CATS=["Электротележки / Рохли", "Перевозчики поддонов", "Электроштабелеры", "Ричтраки", "Комплектовщики заказов", "Узкопроходные штабелеры", "Электропогрузчики (до 2.5т)", "Электропогрузчики (тяжелые)", "Поломоечные машины", "Ножничные подъемники", "Коленчатые подъемники", "Тягачи складские/аэродромные", "Гольф-кары и шаттлы", "Коммунальные электромобили", "Шахтный/Горный транспорт", "ИБП / Резервное питание", "Солнечная/ветровая система", "── Бошқа / Другое ──"];
+var CATS=["Погрузчики","Штабелёры","Ричтраки","Рохли / Тележки","Тягачи","Комплектовщики / AGV","Гольф-кары / Экскурс. транспорт","Уборочная техника","Ножничные подъёмники","Электро-мотоциклы","ИБП / Резервное питание","── Прочие ──"];
 var BRANDS=["CAT", "STILL", "Linde", "Jungheinrich", "Crown", "Toyota", "Komatsu", "Honda", "Mitsubishi", "Hyster", "Yale", "Doosan", "Clark", "Nissan", "Genie", "JLG", "Haulotte", "Skyjack", "Karcher", "Tennant", "Nilfisk", "Club Car", "EZ-GO", "Yamaha", "Goupil", "Alke", "Sandvik", "Epiroc", "Taylor-Dunn", "Hangcha", "TCM", "Rocla", "EP Equipment", "Lema", "Magaziner", "── Бошқа / Другая ──"];
 var VOLTS=["6V", "8V", "12V", "24V", "36V", "40V", "48V", "72V", "80V", "96V", "── Бошқа / Другой ──"];
-var AHS=["55Ah", "63Ah", "75Ah", "76Ah", "100Ah", "115Ah", "120Ah", "188Ah", "210Ah", "225Ah", "240Ah", "245Ah", "250Ah", "265Ah", "300Ah", "315Ah", "360Ah", "375Ah", "400Ah", "440Ah", "450Ah", "480Ah", "500Ah", "520Ah", "525Ah", "550Ah", "560Ah", "575Ah", "595Ah", "620Ah", "625Ah", "630Ah", "640Ah", "650Ah", "700Ah", "720Ah", "750Ah", "775Ah", "930Ah", "1000Ah+", "── Бошқа / Другой ──"];
-var sel={cat:0,brand:0,volt:3,ah:12};
+var AHS=["50–100 Ah","101–150 Ah","151–200 Ah","201–250 Ah","251–300 Ah","301–350 Ah","351–400 Ah","401–450 Ah","451–500 Ah","501–600 Ah","601–700 Ah","701–800 Ah","801–900 Ah","901–1000 Ah","1001–1100 Ah","1101–1200 Ah","1201–1300 Ah","── Бошқа / Другой ──"];
+var sel={cat:0,brand:0,volt:3,ah:0};
 var chips_val={akb:""};
 
 // Телефон маска
@@ -287,11 +302,13 @@ function buildSummary(){
     ["Компания",document.getElementById("f_company").value||"—"],
     ["Техника",CATS[sel.cat]],
     ["Марка",document.getElementById("f_brand_c").value||BRANDS[sel.brand]],
+    ["Модель",document.getElementById("f_model").value||"—"],
     ["АКБ тури",chips_val.akb||"—"],
     ["Вольтаж",VOLTS[sel.volt]],
     ["Ампер соат",document.getElementById("f_ah_c").value||AHS[sel.ah]],
+    ["Ўлчамлари (мм)",(function(){var w=document.getElementById("f_dim_w").value,l=document.getElementById("f_dim_l").value,h=document.getElementById("f_dim_h").value;return(w&&l&&h)?w+" × "+l+" × "+h:"—";})()],
     ["Миқдори",(document.getElementById("f_qty").value||"—")+" дона"],
-    ["Модель",document.getElementById("f_model").value||"—"],
+    ["Зарядлаш мосламаси",document.getElementById("f_charger").checked?"Ҳа / Нужен":"Йўқ / Не нужен"],
     ["Изоҳ",document.getElementById("f_note").value||"—"]
   ];
   if(manager) d.unshift(["Менежер / Менеджер","<strong style='color:#2DBFBF'>"+manager+"</strong>"]);
@@ -315,6 +332,10 @@ function submit(){
     ah:document.getElementById("f_ah_c").value||AHS[sel.ah],
     qty:document.getElementById("f_qty").value,
     model:document.getElementById("f_model").value,
+    dim_w:document.getElementById("f_dim_w").value,
+    dim_l:document.getElementById("f_dim_l").value,
+    dim_h:document.getElementById("f_dim_h").value,
+    charger:document.getElementById("f_charger").checked?"Ҳа":"Йўқ",
     note:document.getElementById("f_note").value,
     manager:manager||"Boshqa"
   };
@@ -335,7 +356,7 @@ window.addEventListener("load",function(){
   buildDrum("dl_cat",CATS,"cat",0);
   buildDrum("dl_brand",BRANDS,"brand",0);
   buildDrum("dl_volt",VOLTS,"volt",3);
-  buildDrum("dl_ah",AHS,"ah",12);
+  buildDrum("dl_ah",AHS,"ah",0);
 });
 </script>
 </body>
